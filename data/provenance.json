@@ -1,0 +1,26 @@
+{
+  "source": "UCI Online Retail",
+  "author": "Daqing Chen",
+  "year": 2015,
+  "doi": "https://doi.org/10.24432/C5BW33",
+  "license": "CC BY 4.0",
+  "source_sha256": "43465a06f2ccf7c8b5bd2892bc7defb52f97487934fe93b16ae4c3936424676d",
+  "raw_rows": 541909,
+  "converted_rows": 6072,
+  "daily_rows": 1119,
+  "country": "United Kingdom",
+  "selection": "Top three by distinct positive-sale invoices in first 120 calendar days",
+  "selection_cutoff_exclusive": "2011-03-31",
+  "last_complete_day": "2011-12-08",
+  "skus": [
+    "85123A",
+    "22423",
+    "85099B"
+  ],
+  "descriptions": {
+    "85123A": "WHITE HANGING HEART T-LIGHT HOLDER",
+    "22423": "REGENCY CAKESTAND 3 TIER",
+    "85099B": "JUMBO BAG RED RETROSPOT"
+  },
+  "semantics": "Gross recorded sale quantities; cancellation rows excluded, not net demand after returns. Missing calendar days are zero-filled under complete-capture assumption. Final partially observed day excluded."
+}
