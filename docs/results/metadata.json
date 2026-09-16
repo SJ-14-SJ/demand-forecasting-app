@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "source_sha256": "0c846be735eb92ef338d265aaef1a9199028a5670fe5577918d4ec6669ee78c2",
+  "artifact_sha256": "509375da68bdd21c365b896a6d0c228bb441bfde2c7ad3cbd00d847fe762be27",
+  "holdout_product_days": 84,
+  "interpretation": "Descriptive audit of one frozen holdout; no model selection or refitting"
+}
