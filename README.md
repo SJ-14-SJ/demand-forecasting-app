@@ -1,10 +1,21 @@
 # DemandLab — Demand Forecasting & Inventory Explorer
 
+[![Forecast and application tests](https://github.com/SJ-14-SJ/demand-forecasting-app/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/SJ-14-SJ/demand-forecasting-app/actions/workflows/tests.yml)
+
 A full-stack forecasting application with **chronological evaluation, a FastAPI backend and a responsive React interface**. It compares a weekly baseline against Ridge regression, keeps the final 28 days out of model selection, and exposes both successes and failure cases.
 
 ![DemandLab desktop interface](docs/demo-desktop.png)
 
-[Data engineering companion](https://github.com/SJ-14-SJ/retail-data-platform) · [Evaluation report](docs/EVALUATION.md) · [Model card](docs/MODEL-CARD.md)
+[Case study](docs/CASE-STUDY.md) · [Evaluation](docs/EVALUATION.md) · [Error analysis](docs/ERROR-ANALYSIS.md) · [Model card](docs/MODEL-CARD.md) · [Data engineering companion](https://github.com/SJ-14-SJ/retail-data-platform)
+
+## Review in two minutes
+
+| Question | Evidence |
+| --- | --- |
+| How is leakage controlled? | Product selection precedes validation; four expanding folds select models; the final 28 days stay out of selection. [Tests](tests/test_engine.py) perturb holdout targets and verify unchanged selection and band calibration. |
+| Does the trained model always win? | No. Validation selects the weekly baseline for two of three products. [Both candidates' holdout results](docs/EVALUATION.md) are retained. |
+| Where does it fail? | [Error analysis](docs/ERROR-ANALYSIS.md) audits all 84 holdout product-days, including bias, horizon slices, high-demand days and the largest misses. |
+| Can the application be exercised? | The React UI supports product/horizon controls, CSV export and inventory scenarios; [browser tests](frontend/tests/ui.spec.js) cover mobile layout and API failure/retry. |
 
 ## What is implemented
 
@@ -12,6 +23,7 @@ A full-stack forecasting application with **chronological evaluation, a FastAPI 
 - A weekly seasonal-naive baseline and recursive Ridge forecasts using lag, rolling, calendar and trend features.
 - Four expanding 14-day validation windows; per-product model selection by validation MAE.
 - A separate 28-day holdout and explicit error/coverage reporting.
+- A reproducible audit of frozen predictions, with source-checksum verification and downloadable residual/error-slice CSVs.
 - Refit on the available history for the next 28 forecast days.
 - A versioned JSON artifact containing history summaries, metrics, fold dates, predictions and Ridge parameters where applicable.
 - A FastAPI service with documented endpoints, input validation and explicit missing-artifact errors.
@@ -44,8 +56,11 @@ For frontend development, keep the API running and run `npm --prefix frontend ru
 
 ```bash
 python -m forecast.train
+python -m forecast.diagnostics
 python -m unittest discover -s tests -v
 ```
+
+Diagnostics are written to `outputs/error-analysis/`. The [published report](docs/ERROR-ANALYSIS.md), [84 daily residuals](docs/results/holdout-residuals.csv) and [error slices](docs/results/error-slices.csv) are included for inspection without running the application. No public hosted instance is currently configured.
 
 The default CSV is attributed public data. `data/synthetic_demand.csv` is an additional clearly labelled fixture from the companion pipeline; it is not used for the published real-data metrics. To try it independently:
 
@@ -105,4 +120,4 @@ Derived from **Chen, D. (2015). Online Retail. UCI Machine Learning Repository.*
 
 This is historical data from 2010–2011. Forecast dates follow that historical range and are not current retail predictions.
 
-Code is MIT-licensed. Built with Codex assistance; [development exercises](docs/NEXT-STEPS.md) identify work to understand and extend.
+Code is MIT-licensed. Built with Codex assistance; [development exercises](docs/NEXT-STEPS.md) identify work to understand and extend. See [contributing](CONTRIBUTING.md) for the review and validation workflow.

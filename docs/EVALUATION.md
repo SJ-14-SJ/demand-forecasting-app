@@ -30,6 +30,6 @@ MAE is in units per day. WAPE is total absolute error divided by total observed 
 
 ## Reproduce
 
-`python -m forecast.train` regenerates the artifact from the bundled public aggregate. Its SHA-256 source fingerprint is stored in the artifact. Tests cover future-target leakage, the weekly baseline, malformed daily series and API validation.
+`python -m forecast.train` regenerates the artifact from the bundled public aggregate. Its SHA-256 source fingerprint is stored in the artifact. Then `python -m forecast.diagnostics` produces the [error analysis](ERROR-ANALYSIS.md), [daily residuals](results/holdout-residuals.csv) and [error slices](results/error-slices.csv). This audit uses the frozen selected forecasts and does not retrain or choose a different model. Tests cover future-target leakage, the weekly baseline, malformed daily series, source-checksum mismatch and API validation.
 
 Next experiments should use new chronological evaluation windows, not repeatedly tune against this holdout.
